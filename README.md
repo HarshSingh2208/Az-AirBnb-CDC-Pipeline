@@ -1,60 +1,75 @@
-# Az-AirBnb-CDC-Pipeline
-AirBnB CDC Ingestion Pipeline & Mock Data Generator
+# AirBnB CDC Ingestion Pipeline
 
-Overview
-This repository contains two key components for managing data ingestion and testing processes related to AirBnB's Change Data Capture (CDC) pipeline. The project integrates with Azure services such as Cosmos DB, Azure Synapse Analytics, and Azure Data Factory (ADF). It includes:
+## Overview
 
-AirBnB CDC Ingestion Pipeline: Built using Azure Data Factory to handle real-time data ingestion, transformation, and processing from multiple data sources.
-Mock Data Generator: A Python script designed to generate synthetic booking data for testing the ingestion pipeline by inserting records into Cosmos DB.
-Project Structure
-1. AirBnB CDC Ingestion Pipeline
-Functionality:
+This repository contains the AirBnB Change Data Capture (CDC) Ingestion Pipeline, which is built using Azure Data Factory (ADF) to handle real-time data ingestion, transformation, and processing. The pipeline integrates with Azure services like Cosmos DB, Azure Synapse Analytics, and Azure Data Lake Storage (ADLS) to enable robust, scalable data workflows.
 
-Ingests data from multiple sources, including ADLS and Cosmos DB.
-Performs data transformations and loads data into Azure Synapse for further analysis.
-Sends success and failure email notifications based on the pipeline execution outcome.
-Trigger: The pipeline is triggered every 1 hour to ensure timely processing of real-time data coming into Cosmos DB. This ensures that even though data arrives in real-time, it is processed and transformed at regular intervals.
-2. Mock Data Generator for Cosmos DB
-Functionality:
+The initial step of the pipeline involves generating mock booking data using a Python script. This mock data is then ingested into Cosmos DB, and the pipeline processes the data at regular intervals to ensure it is available for analytics and reporting.
 
-Generates and inserts synthetic booking data into Cosmos DB.
-Utilizes the Faker library to create realistic mock data such as booking IDs, customer IDs, property IDs, etc.
-Integrates with Azure Key Vault to securely retrieve Cosmos DB credentials.
-Requirements
-AirBnB CDC Ingestion Pipeline:
-Mock Data Generator:
-Setup
-1. Clone the Repository
-bash
-Copy code
+## Project Structure
+
+### AirBnB CDC Ingestion Pipeline
+- **Technology Stack**: Azure Data Lake Storage (ADLS), Cosmos DB, Azure Synapse Analytics, Azure Data Factory (ADF), Python
+- **Functionality**:
+  - **Mock Data Generation** (Initial Step):
+    - A Python script generates and inserts synthetic booking data into Cosmos DB for testing and development purposes.
+    - The data is generated using the `Faker` library and is securely inserted into Cosmos DB by retrieving credentials from Azure Key Vault.
+  - **Data Processing**:
+    - Ingests data from Cosmos DB and ADLS, performing necessary transformations.
+    - Transforms the data and loads it into Azure Synapse Analytics for downstream analytics.
+  - **Data Transformation**:
+    - Key transformations are performed, including customer dimension loading and booking fact transformations, ensuring the data is ready for analytics.
+  - **Pipeline Trigger**:
+    - The pipeline is triggered every **1 hour** to process and transform the real-time data arriving in Cosmos DB.
+  - **Success and Failure Notifications**:
+    - Email notifications are sent upon successful execution or failure of the pipeline to ensure timely action.
+
+## Requirements
+
+- Azure Data Factory
+- Azure Data Lake Storage (ADLS)
+- Cosmos DB
+- Azure Synapse Analytics
+- Python 3.x
+- Azure SDK for Python (`azure-cosmos`, `azure-identity`, `azure-keyvault-secrets`)
+- `Faker` library for generating mock data
+
+## Setup
+
+### 1. Clone the Repository
+```bash
 git clone https://github.com/your-repo/airbnb-cdc-pipeline.git
 cd airbnb-cdc-pipeline
-2. Running the Mock Data Generator
+```
+
+### 2. Running the Mock Data Generation Script
 Install the required Python dependencies:
-
-bash
-Copy code
+```bash
 pip install azure-cosmos faker azure-identity azure-keyvault-secrets
-To run the script, simply execute:
+```
 
-bash
-Copy code
+To generate mock data and insert it into Cosmos DB:
+```bash
 python mock-data-in-cosmosDB.py
-3. Deploying the AirBnB CDC Pipeline
-Import the ARM template ARMTemplateForFactory.json in Azure Data Factory to create the pipeline resources.
-Update the necessary parameters such as Cosmos DB credentials, ADLS path, and Synapse Analytics connections.
-Ensure that the pipeline is configured to trigger every 1 hour.
-Usage
-Mock Data Generator
-The mock data generator script allows you to generate and insert synthetic booking data into the Cosmos DB container for testing. The script fetches sensitive credentials (Cosmos DB endpoint and key) from Azure Key Vault, ensuring secure access. You can specify the number of records to generate and the customer IDs for the bookings.
+```
 
-AirBnB CDC Pipeline
-The AirBnB CDC pipeline manages the real-time ingestion, transformation, and processing of customer and booking data. While data arrives in real-time in Cosmos DB, the pipeline processes it every 1 hour to ensure batch transformation and loading into Azure Synapse Analytics.
+### 3. Deploying the AirBnB CDC Pipeline
+- Import the ARM template `ARMTemplateForFactory.json` in Azure Data Factory to create the pipeline resources.
+- Update the necessary parameters such as Cosmos DB credentials, ADLS path, and Synapse Analytics connections.
+- Ensure that the pipeline is configured to trigger every **1 hour** for periodic data processing.
 
-License
+## Usage
+
+### Pipeline Steps
+1. **Mock Data Generation**: Generates and inserts synthetic booking data into Cosmos DB using the Python script.
+2. **LoadCustomerDim Pipeline**: Processes and loads customer data from ADLS to Synapse.
+3. **LoadBookingFact Pipeline**: Transforms booking data from Cosmos DB and stores it in a fact table in Synapse.
+4. **Error Handling**: Any bad records encountered during processing are captured and stored separately for auditing purposes.
+
+## License
+
 This project is licensed under the MIT License.
 
-Contributing
-Contributions are welcome! Please feel free to submit a pull request or open an issue.
+## Contributing
 
-This enhanced README adds visual elements (badges/icons) for different tools and services, making the content more engaging. Let me know if you'd like to adjust anything!
+Contributions are welcome! Please feel free to submit a pull request or open an issue.
