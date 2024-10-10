@@ -9,7 +9,7 @@ The initial step of the pipeline involves generating mock booking data using a P
 ## 🛠️ Project Structure
 
 ### AirBnB CDC Ingestion Pipeline
-- **Technology Stack**: Azure Data Lake Storage (ADLS), Cosmos DB, Azure Synapse Analytics, Azure Data Factory (ADF), Python
+- **Technology Stack**: Azure Data Lake Storage (ADLS), Cosmos DB, Azure Synapse Analytics, Azure Data Factory (ADF), Python , Azure KeyVault , Logic Apps
 - **Functionality**:
   - **🎉 Mock Data Generation** (Initial Step):
     - A Python script generates and inserts synthetic booking data into Cosmos DB for testing and development purposes.
